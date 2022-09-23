@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/mariather/employee-tracker/issues"
   },
-  "homepage": "https://github.com/mariather/employee-tracker#readme"
+  "homepage": "https://github.com/mariather/employee-tracker#readme",
+  "dependencies": {
+    "console.table": "^0.10.0"
+  }
 }
