@@ -1,54 +1,232 @@
 const inquirer = require('inquirer');
 const queries = require('./lib/queries.js')
 
-const questionsArray = [
-    'all departments',
-    'view all roles',
-    'view all employees',
-    'add a department',
-    'add a role',
-    'add an employee',
-    'and update an employee role'
-]
+//view all departments,  roles,  all employees.
+// add a department,  a role,  an employee. Also update employee role. 
 
-
-//view all departments, view all roles, view all employees, add a department, add a role, add an employee, and update an employee role
-function init() {
-    questions();
+const QuestionPrompts = {
+    main: 'Choose a table to interact with',
+    departments: [
+        'What to do involving the Department Table',
+        'Enter the name of the new Department',
+    ],
+    roles: [
+        'View roles',
+    ],
+    employees: [
+        'View employees',
+    ]
 }
 
-function questions() {
+const ListChoices = {
+    main: [
+        'all departments',
+        'view all roles',
+        'view all employees',
+        'Quit',
+    ],
+    departments: [
+        'view departments',
+        'add a department',
+    ],
+    roles: [
+        'view roles',
+        'add a role',
+    ],
+    employees: [
+        'view employees',
+        'add an employees',
+        'update a employee role',
+    ]
+}
+
+function init() {
+    main();
+}
+
+function main() {
+    console.log('\n\n')
     inquirer.prompt([
     {
         type: 'list',
-        message: 'Do something',
-        name: 'role',
-        choices: questionsArray
+        message: QuestionPrompts.main,
+        name: 'choice',
+        choices: ListChoices.main
     }
     ]).then((value) => {
-        console.log(value)
-        switch(value.role){
-            case questionsArray[0]:
-                queries.selectDepartmentTable();
-                break
-            case questionsArray[1]:
-                queries.selectRolesTable();
-                break
-            case questionsArray[2]:
-                queries.selectEmployeesTable();
-                break
-            case questionsArray[3]:
-                break
-            case questionsArray[4]:
-                break
-            case questionsArray[5]:
-                break
-            case questionsArray[6]:
-                break
+        switch(value.choice){
+            case ListChoices.main[0]:
+                departments();
+                break;
+            case ListChoices.main[1]:
+                roles();
+                break;
+            case ListChoices.main[2]:
+                employees();
+                break;
+            case ListChoices.main[2]:
+                process.abort();
+                break;
             default:
-                console.log("error in switch case index.js", value.name, questionsArray[0])
+                console.log("error in switch case index.js", value.name);
         }
-        questions();
+    })
+}
+
+function departments() {
+    inquirer.prompt([
+    {
+        type: 'list',
+        message: QuestionPrompts.departments[0],
+        name: 'choice',
+        choices: ListChoices.departments
+    }
+    ]).then((value) => {
+        switch(value.choice){
+            case ListChoices.departments[0]:
+                queries.selectDepartmentTable();
+                main();
+                break;
+            case ListChoices.departments[1]:
+                departmentAdd();
+                break;
+            default:
+                console.log("error in switch case departments index.js", value.name);
+        }
+    })
+}
+
+function departmentAdd() {
+    inquirer.prompt({
+        type: 'input',
+        message: QuestionPrompts.departments[1],
+        name: 'choice',
+    }).then((value) => {
+        queries.insertDepartmentsTable(value.choice);
+        main();
+    })
+}
+
+function roles() {
+    inquirer.prompt([
+    {
+        type: 'list',
+        message: 'What to do involving the Roles Table',
+        name: 'choice',
+        choices: ListChoices.roles
+    }
+    ]).then((value) => {
+        switch(value.choice){
+            case ListChoices.roles[0]:
+                queries.selectRolesTable();
+                main();
+                break;
+            case ListChoices.roles[1]:
+                roleAdd();
+                break;
+            case ListChoices.roles[2]:
+                roleUpdate();
+                break;
+            default:
+                console.log("error in switch case index.js", value.name);
+        }
+    })
+}
+
+//title, salary, department_id
+function roleAdd() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Enter role title',
+            name: 'title',
+        },
+        {
+            type: 'input',
+            message: 'Enter role salary',
+            name: 'salary',
+        },
+        {
+            type: 'input',
+            message: 'Enter role department id',
+            name: 'department_id',
+        },
+    ]).then((value) => {
+        queries.insertRolesTable(value.title, value.salary, value.department_id);
+        main();
+    })
+}
+
+function employees() {
+    inquirer.prompt([
+    {
+        type: 'list',
+        message: 'What to do involving the Employees Table',
+        name: 'choice',
+        choices: ListChoices.employees
+    }
+    ]).then((value) => {
+        switch(value.choice){
+            case ListChoices.employees[0]:
+                queries.selectEmployeesTable();
+                main();
+                break;
+            case ListChoices.employees[1]:
+                employeeAdd();
+                break;
+            case ListChoices.employees[1]:
+                employeeUpdate();
+                break;
+            default:
+                console.log("error in switch case index.js", value.name);
+        }
+    })
+}
+
+function employeeAdd() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Enter employee title',
+            name: 'title',
+        },
+        {
+            type: 'input',
+            message: 'Enter employee salary',
+            name: 'salary',
+        },
+        {
+            type: 'input',
+            message: 'Enter employee department id',
+            name: 'department_id',
+        },
+        {
+            type: 'input',
+            message: 'Enter manager id',
+            name: 'manager_id',
+        },
+    ]).then((value) => {
+        queries.insertEmployeeTable(value.title, value.salary, value.department_id, value.manager_id);
+        main();
+    })
+}
+
+// I am prompted to select an employee to update their new role and this information is updated in the database.
+function employeeUpdate() {
+    inquirer.prompt([
+        {
+            type: 'input',
+            message: 'Enter employee ID to update',
+            name: 'employee_id',
+        },
+        {
+            type: 'input',
+            message: 'Enter the new role',
+            name: 'role',
+        },
+    ]).then((value) => {
+        queries.updateEmployeeTable(value.employee_id, value.role);
+        main();
     })
 }
 
