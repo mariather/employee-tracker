@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const queries = require('./lib/queries.js')
+//const db = mysql.createConnection('mysql://root:rootroot@localhost:3306/employeeManager02_db')
 
 //view all departments,  roles,  all employees.
 // add a department,  a role,  an employee. Also update employee role. 
