@@ -1,4 +1,4 @@
-# employee-tracker
+# Employee-tracker
 
 ## Description
 
@@ -17,4 +17,4 @@ This command-line application allows to manage a company's employee database, us
   ```npm i```
 
  * Deploy on a backend web server and run via command line interface  
-  ```npm start`
+  ```npm start```
