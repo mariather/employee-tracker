@@ -18,6 +18,3 @@ This command-line application allows to manage a company's employee database, us
 
  * Deploy on a backend web server and run via command line interface  
   ```npm start```
-
-
-  
